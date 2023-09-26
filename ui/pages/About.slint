@@ -1,0 +1,41 @@
+import { Page } from "../widgets/Page.slint";
+import { AboutSlint } from "std-widgets.slint";
+
+export component About inherits Page {
+    has-back-button: true;
+    header: @tr("About");
+
+    GridLayout {
+        padding-top: 46px /* header line height in design */
+                     + /* extra top-padding in design */ 27px;
+        spacing: 24px;
+        Row {
+            Text {
+                text: @tr("SlintDotnet v1.2.21");
+                color: #ffffff;
+                font-size: 20px * 1.125;
+                font-weight: 800;
+            }
+        }
+
+        Row {
+            VerticalLayout {
+                spacing: 10px;
+
+                Image {
+                    source: @image-url("../images/madeWithSlint.svg");
+                }
+                
+                Image {
+                    source: @image-url("../images/dotnet-logo.svg");
+                    height: 100px;
+                }
+
+                Image {
+                    source: @image-url("../images/torizon_logo_white.svg");
+                    height: 70px;
+                }
+            }
+        }
+    }
+}

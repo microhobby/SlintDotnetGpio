@@ -1,0 +1,50 @@
+import { Page } from "../widgets/Page.slint";
+import { AboutSlint , VerticalBox, Button} from "std-widgets.slint";
+
+export component GpioLed inherits Page {
+    has-back-button: true;
+    header: @tr("LED");
+
+    in-out property<image> ledOn: @image-url("../images/led-red-on.png");
+    in-out property<image> ledOff: @image-url("../images/led-red-off.png");
+    in-out property<image> led: @image-url("../images/led-red-off.png");
+    in-out property<bool> ledState: false;
+    callback toggleLed();
+
+    public pure function toggleImage(_ledState: bool) -> image {
+        if (_ledState) {
+            return ledOn;
+        } else {
+            return ledOff;
+        }
+    }
+
+    GridLayout {
+        padding-top: 46px /* header line height in design */
+                     + /* extra top-padding in design */ 27px;
+        spacing: 24px;
+        Row {
+            Text {
+                text: @tr("SlintDotnet v1.2.21");
+                color: #ffffff;
+                font-size: 20px * 1.125;
+                font-weight: 800;
+            }
+        }
+
+        Row {
+            VerticalBox { 
+                Image {
+                    source: led;
+                }
+
+                toggleButton := Button { 
+                    text: @tr("TOGGLE");
+                    clicked => {
+                        toggleLed();
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,80 @@
+import { 
+    Button,
+    HorizontalBox,
+    VerticalBox,
+    AboutSlint
+} from "std-widgets.slint";
+
+import { About } from "pages/About.slint";
+import { GpioLed } from "pages/GpioLed.slint";
+
+export component AppWindow inherits Window {
+    out property<int> activePage: 0;
+    in-out property<bool> isLedOn: false;
+    callback toggleLed();
+
+    default-font-size: 30px;
+    title: @tr("Slint GPIO");
+    width: 800px;
+    height: 480px;
+
+    VerticalLayout {
+        padding: 10px;
+
+        menu-view := Rectangle {
+            VerticalBox {
+                width: 155px;
+                x: 0;
+
+                Button {
+                    text: "LED";
+                    clicked => {
+                        root.activePage = 0;
+                    }
+                }
+
+                Button {
+                    text: "About";
+                    clicked => {
+                        root.activePage = 1;
+                    }
+                }
+            }
+        }
+    }
+
+    HorizontalLayout {
+        padding: 10px;
+        padding-left: 180px;
+
+        main-view := Rectangle {
+            height: 100%;
+            border-radius: 10px;
+            background: transparent;
+
+            Rectangle {
+                clip: true;
+                x: main-view.border-radius / 2;
+                y: main-view.border-radius / 2;
+                width: main-view.width - main-view.border-radius;
+                height: main-view.height - main-view.border-radius;
+
+                gpio-page := GpioLed {
+                    y: root.activePage == 0 ? 0 : root.activePage < 0 ? - self.height - 1px : parent.height + 1px;
+                    animate y { duration: 125ms; easing: ease; }
+                    has-back-button: false;
+                    led: gpio-page.toggleImage(root.isLedOn);
+                    toggleLed => {
+                        root.toggleLed();
+                    }
+                }
+
+                home-page := About {
+                    y: root.activePage == 1 ? 0 : root.activePage < 1 ? - self.height - 1px : parent.height + 1px;
+                    animate y { duration: 125ms; easing: ease; }
+                    has-back-button: false;
+                }
+            }
+        }
+    }
+}
